@@ -39,3 +39,36 @@ h1 {
 	white-space: nowrap;
 	text-overflow: ellipsis;
 }
+
+#to-top {
+	@include no-outline;
+	display: none;
+	position: fixed;
+	bottom: 20px;
+	right: 30px;
+	z-index: 99;
+	font-size: 1.3em;
+	background-color: $primary-bg-color;
+	color: $primary-highlight-color;
+	cursor: pointer;
+	height: 2.5em;
+	width: 2.5em;
+	border-radius: 50%;
+	@media only screen and (min-width: $screen-md-min) {
+		bottom: 60px;
+		right: 40px;
+		font-size: 1.5em;
+		height: 3em;
+		width: 3em;
+	}
+}
+
+#to-top:hover {
+	@include no-outline;
+	background-color: $primary-highlight-color;
+	color:  $primary-bg-color;
+}
+
+#to-top:focus {
+	@include no-outline;
+}

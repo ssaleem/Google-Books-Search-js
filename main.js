@@ -90,7 +90,25 @@ const resultsView = {
     this.resultsArea.removeChild(document.querySelector('.error'));
   }
 
+}
 
+const backToTop = {
+  init() {
+    this.toTopBtn = document.querySelector('#to-top');
+    this.toTopBtn.addEventListener('click', () => window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    }));
+    window.onscroll = () => this.scrollCheck();
+  },
+  scrollCheck() {
+    if (document.body.scrollTop > 250 || document.documentElement.scrollTop > 250) {
+      this.toTopBtn.style.display = "block";
+    }
+    else {
+      this.toTopBtn.style.display = "none";
+    }
+  }
 }
 
 const utils = {
@@ -112,6 +130,7 @@ const controller = {
     searchView.init();
     resultsView.init();
     resultsData.init();
+    backToTop.init();
   },
   // Searches for books and returns a promise that resolves a JSON list
   searchForBooks(term) {

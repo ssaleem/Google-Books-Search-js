@@ -3,6 +3,11 @@ $primary-highlight-color: #cc5500;
 $primary-font-color: #65646AFF;
 $secondary-highlight-color: #D97E25;
 
+// Small tablets (portrait view)
+$screen-md-min: 768px;
+//Large tablets and desktops
+$screen-xl-min: 1200px;
+
 @mixin no-outline {
   border: none;
   outline: none;
