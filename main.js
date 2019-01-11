@@ -74,7 +74,19 @@ const resultsView = {
   });
   this.resultsElement.innerHTML = '';
   this.resultsElement.appendChild(fragment);
-}
+},
+  // Renders an error message
+  // Previous results are retained in results area while error message is rendered on the top
+  // Commented out code is compatible with the implementation as well, although it clears any previous search results
+  showError(msg) {
+    // const html = `<li><p class="error">${msg}</p></li>`;
+    // document.querySelector('#results').innerHTML = html;
+    const newError = document.createElement('p');
+    newError.className = 'error';
+    newError.innerHTML = msg;
+    this.resultsArea.insertBefore(newError, this.resultsArea.children[1]);
+  }
+
 
 }
 
@@ -93,9 +105,11 @@ const utils = {
 
 const controller = {
   init() {
+    this.showingError = false;
     searchView.init();
     resultsView.init();
     resultsData.init();
+
   },
   // Searches for books and returns a promise that resolves a JSON list
   searchForBooks(term) {
@@ -125,15 +139,18 @@ const controller = {
         // Render all results
         resultsView.render(resultsData.getResults('all'));
       }
-    });
+      else {
+        throw new Error(`No matching results found for ${term}`);
+      }
+    })
+    .catch(e => this.handleError(e));
+  },
+  handleError(e) {
+    resultsView.showError(e);
+    this.showingError = true;
   }
 }
 
 controller.init();
 
-// Renders an error message
-function showError(msg) {
-  const html = `<li><p class="error">${msg}</p></li>`;
-  document.querySelector('#results').innerHTML = html;
-}
 
