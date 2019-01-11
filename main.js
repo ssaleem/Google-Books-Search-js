@@ -5,11 +5,11 @@ const searchView = {
 
     // Search bar listeners
     this.searchBar.addEventListener('keypress', (event) => {
-      (event.keyCode === 13 && event.target.value !== '') && controller.searchForBooks(event.target.value);
+      (event.keyCode === 13 && event.target.value !== '') && controller.searchNRender(event.target.value);
     });
 
     this.searchBtn.addEventListener('click', () => {
-      (searchBar.value !== '') && controller.searchForBooks(searchBar.value);
+      (searchBar.value !== '') && controller.searchNRender(searchBar.value);
     });
   }
 }
@@ -17,7 +17,14 @@ const searchView = {
 const resultsData = {
   init() {
     // Object to store all unique results with key 'all' as well as results for individual searches
-    this.allResults = {'all': []};
+    this.results = {'all': []};
+  },
+  setResults(res, term) {
+    this.results[term] = res;
+    console.log(this.results[term]);
+  },
+  getResults(term) {
+    return this.results[term];
   }
 }
 
@@ -25,6 +32,19 @@ const resultsView = {
   init() {
     this.resultsElement =  document.querySelector('.results');
     this.resultsArea =  document.querySelector('#results-area');
+  }
+}
+
+const utils = {
+  getUnique(currentArray, newArray){
+    // Reverse new Array before concatenation to preserve top matches
+    // Reverse concatenated array before finding unique elements to delete older duplicate entries and keep recent ones
+    let unique = currentArray.concat(newArray.slice(0).reverse()).reverse();
+    unique = unique.filter((item, index, array) => {
+      let found = array.findIndex(i => i.id === item.id);
+      return found === index;
+    });
+    return unique.reverse();
   }
 }
 
@@ -47,8 +67,22 @@ const controller = {
         throw new Error('Sorry something went wrong with Google Books API');
       }
     });
+  },
+  // 1. Search
+  // 2. Render results on success otherwise render error message
+  searchNRender(term) {
+    this.searchForBooks(term)
+    .then(results => {
+      // Check if query was valid and returned any results
+      if(results.totalItems > 0){
+        // Remove duplicates if any from new set of results before conctenation
+        resultsData.setResults(utils.getUnique(resultsData.getResults('all'), results.items), 'all');
+      }
+    });
   }
 }
+
+
 
 controller.init();
 
