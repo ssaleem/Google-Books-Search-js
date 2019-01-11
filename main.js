@@ -9,7 +9,7 @@ const searchView = {
     });
 
     this.searchBtn.addEventListener('click', () => {
-      (searchBar.value !== '') && controller.searchNRender(searchBar.value);
+      (this.searchBar.value !== '') && controller.searchNRender(this.searchBar.value);
     });
   }
 }
