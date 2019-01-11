@@ -3,13 +3,18 @@
     <title>Google Books Search Engine</title>
     <!-- fetch polyfill if your browser doesn't support fetch -->
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.min.js"></script> -->
+    <!-- fontAwesome for icons -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
-    <div id="search-area">
-      <input id="search-bar" type="text" placeholder="Input search term here">
-      <button id="search-btn">Search</button>
-    </div>
+    <header>
+      <h1>Google Books Search</h1>
+      <div class="search-area">
+        <input aria-label="Type to Search" id="search-bar" type="text" placeholder="Search">
+        <button aria-label="Search" id="search-btn"><i class="fas fa-search"></i></button>
+      </div>
+    </header>
     <div id="results-area">
       <ul id="results"></ul>
     </div>

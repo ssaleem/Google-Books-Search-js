@@ -1,0 +1,8 @@
+$primary-bg-color: #f9ede4;
+$primary-highlight-color: #cc5500;
+$primary-font-color: #65646AFF;
+
+@mixin no-outline {
+  border: none;
+  outline: none;
+}
