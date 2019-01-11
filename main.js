@@ -1,4 +1,4 @@
-const search = {
+const searchView = {
   init(){
     this.searchBar = document.querySelector('#search-bar');
     this.searchBtn = document.querySelector('#search-btn');
@@ -14,9 +14,25 @@ const search = {
   }
 }
 
+const resultsData = {
+  init() {
+    // Object to store all unique results with key 'all' as well as results for individual searches
+    this.allResults = {'all': []};
+  }
+}
+
+const resultsView = {
+  init() {
+    this.resultsElement =  document.querySelector('.results');
+    this.resultsArea =  document.querySelector('#results-area');
+  }
+}
+
 const controller = {
   init() {
-    search.init();
+    searchView.init();
+    resultsView.init();
+    resultsData.init();
   },
   // Searches for books and returns a promise that resolves a JSON list
   searchForBooks(term) {
