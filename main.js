@@ -85,6 +85,9 @@ const resultsView = {
     newError.className = 'error';
     newError.innerHTML = msg;
     this.resultsArea.insertBefore(newError, this.resultsArea.children[1]);
+  },
+  clearError() {
+    this.resultsArea.removeChild(document.querySelector('.error'));
   }
 
 
@@ -109,7 +112,6 @@ const controller = {
     searchView.init();
     resultsView.init();
     resultsData.init();
-
   },
   // Searches for books and returns a promise that resolves a JSON list
   searchForBooks(term) {
@@ -135,7 +137,8 @@ const controller = {
       if(results.totalItems > 0){
         // Remove duplicates if any from new set of results before conctenation
         resultsData.setResults(utils.getUnique(resultsData.getResults('all'), results.items), 'all');
-
+        // Remove any previous error message
+        this.showingError && this.clearError();
         // Render all results
         resultsView.render(resultsData.getResults('all'));
       }
@@ -148,6 +151,10 @@ const controller = {
   handleError(e) {
     resultsView.showError(e);
     this.showingError = true;
+  },
+  clearError() {
+    resultsView.clearError();
+    this.showingError = false;
   }
 }
 
