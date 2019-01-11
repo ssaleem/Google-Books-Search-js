@@ -32,7 +32,50 @@ const resultsView = {
   init() {
     this.resultsElement =  document.querySelector('.results');
     this.resultsArea =  document.querySelector('#results-area');
-  }
+  },
+  render(listToRender) {
+
+  // Create a fragment and append 'li' elements containing book entries to fragment to prevent frequent updates on DOM
+  let fragment = document.createDocumentFragment();
+
+  // Generate html for each book entry and append to fragment
+  listToRender.forEach(item => {
+    let bookData = item.volumeInfo;
+    const bookItem = document.createElement('li');
+    bookItem.className = 'book-item';
+    // Generate html for book cover
+    let cover = '';
+    if (bookData.imageLinks && bookData.imageLinks.thumbnail) {
+      const img = `<img class="thumbimg" src=${bookData.imageLinks.thumbnail} alt=${`${bookData.title} book image`}>`;
+      const link = `<a class="preview" title="Preview Link" href=${bookData.previewLink} target="_blank"><i class="fas fa-eye"></i></a>`;
+      cover = `<div class="image-div">
+                    ${img}
+                    ${link}
+                    </div>`;
+    }
+    else {
+      cover = `<div class="image-div backup">
+                  <p class="cover-backup">Cover Image Unavailable</p>
+                </div>`
+    }
+    // Generate html for title, subtitle, and authors
+    const title = `<a class="title ellipsis" href=${bookData.previewLink} title="${bookData.title}" target="_blank">${bookData.title}</a>`;
+    let subtitleProp = bookData.subtitle ? bookData.subtitle : ' ';
+    const subtitle = `<p class="subtitle ellipsis" title="${subtitleProp}">${subtitleProp}</p>`
+    let authorsProp = bookData.authors ? bookData.authors.join(', ') : '';
+    const authors = `<p class="author ellipsis" title="${authorsProp}">${authorsProp}</p>`
+    // Add book data to book entry
+    bookItem.innerHTML = `${cover}
+                          ${title}
+                          ${subtitle}
+                          ${authors}`;
+    fragment.append(bookItem);
+
+  });
+  this.resultsElement.innerHTML = '';
+  this.resultsElement.appendChild(fragment);
+}
+
 }
 
 const utils = {
@@ -69,7 +112,8 @@ const controller = {
     });
   },
   // 1. Search
-  // 2. Render results on success otherwise render error message
+  // 2. Update results
+  // 3. Render results on success otherwise render error message
   searchNRender(term) {
     this.searchForBooks(term)
     .then(results => {
@@ -77,12 +121,13 @@ const controller = {
       if(results.totalItems > 0){
         // Remove duplicates if any from new set of results before conctenation
         resultsData.setResults(utils.getUnique(resultsData.getResults('all'), results.items), 'all');
+
+        // Render all results
+        resultsView.render(resultsData.getResults('all'));
       }
     });
   }
 }
-
-
 
 controller.init();
 
@@ -92,9 +137,3 @@ function showError(msg) {
   document.querySelector('#results').innerHTML = html;
 }
 
-
-
-// Generate HTML and sets #results's contents to it
-function render() {
-  // TODO
-}
