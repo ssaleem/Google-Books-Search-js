@@ -1,0 +1,81 @@
+@import 'variables';
+.results-sort{
+  position: relative;
+  margin: 0 0 0 0.7em ;
+  display: inline-block;
+}
+
+.results-control-btn{
+  background-color: $primary-bg-color;
+  color: $primary-highlight-color;
+  font-size: 0.9em;
+  font-weight: bolder;
+  padding: 0 0.8em 0.6em;
+  border: none;
+  margin: 0;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.results-control-btn:focus {
+	@include no-outline;
+	background-color: $primary-highlight-color;
+  color: $primary-bg-color;
+}
+
+.sort-list {
+	width: 105px;
+}
+
+.dropdown-list {
+  display: none;
+  position: absolute;
+  background-color: $primary-bg-color;
+  width: 130px;
+  border-radius: 4px;
+  font-size: 0.8em;
+  margin: 0;
+  padding: 0.4em;
+  right: 0;
+  box-shadow: 0px 4px 8px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  list-style: outside none none;
+}
+
+.dropdown-list:focus {
+	@include no-outline;
+}
+
+.selected {
+	font-weight: bolder;
+}
+
+.dropdown-item {
+	padding: 0.3em;
+}
+
+.dropdown-item:hover {
+	font-weight: bolder;
+	display: block;
+	cursor: pointer;
+	background-color: #f3d9c6;
+}
+
+.results-sort:hover .dropdown-list{
+  display: block;
+}
+
+.results-sort:hover .results-control-btn{
+  background-color: $primary-highlight-color;
+  color: $primary-bg-color;
+}
+
+.results-sort:focus {
+  @include no-outline;
+}
+
+.dropdown-icon {
+  margin: auto 0.1em;
+  padding: 0;
+  font-size: 1.6em;
+}
