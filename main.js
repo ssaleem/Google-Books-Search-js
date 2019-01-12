@@ -102,6 +102,24 @@ const resultsView = {
 
 }
 
+const resultsControlsView = {
+  init() {
+    this.sortOptionList = document.querySelector('.sort-list');
+
+    this.sortOptionList.addEventListener('click', (event) => {
+      if(event.target.matches('.dropdown-item')){
+        // Update selected item
+        this.sortOptionList.querySelector('.selected').setAttribute("aria-selected", "false");
+        this.sortOptionList.querySelector('.selected').classList.remove('selected');
+        event.target.setAttribute("aria-selected", "true");
+        event.target.classList.add('selected');
+        // render sorted list
+        controller.handleSortSelect(event.target.innerText);
+      }
+    });
+  }
+}
+
 const backToTop = {
   init() {
     this.toTopBtn = document.querySelector('#to-top');
@@ -148,11 +166,14 @@ const utils = {
 
 const controller = {
   init() {
-    this.showingError = false;
+    resultsData.init();
     searchView.init();
     resultsView.init();
-    resultsData.init();
+    resultsControlsView.init();
     backToTop.init();
+    // App state
+    this.showingError = false;
+    this.currentSortSelection = 'Top Matches';
   },
   // Searches for books and returns a promise that resolves a JSON list
   searchForBooks(term) {
