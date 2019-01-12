@@ -20,15 +20,24 @@
     <!-- Results Area -->
     <div id="results-area">
       <div id="results-area-controls">
-        <div class="results-sort">
-          <button class="results-control-btn" aria-haspopup="listbox" role="button">Sort by<i class="fas fa-sort-down dropdown-icon"></i></button>
-          <ul class="sort-list dropdown-list" tabindex="-1"
-          role="listbox">
-            <li class="dropdown-item ellipsis selected" role="option" aria-selected="true">Top Matches</li>
-            <li class="dropdown-item ellipsis" role="option">Highly Rated</li>
-            <li class="dropdown-item ellipsis" role="option">Title - A to Z</li>
-            <li class="dropdown-item ellipsis" role="option">Title - Z to A</li>
-          </ul>
+        <div class="dropdowns">
+          <div class="results-sort">
+            <button class="results-control-btn" aria-haspopup="listbox" role="button">Sort by<i class="fas fa-sort-down dropdown-icon"></i></button>
+            <ul class="sort-list dropdown-list" tabindex="-1"
+            role="listbox">
+              <li class="dropdown-item ellipsis selected" role="option" aria-selected="true">Top Matches</li>
+              <li class="dropdown-item ellipsis" role="option">Highly Rated</li>
+              <li class="dropdown-item ellipsis" role="option">Title - A to Z</li>
+              <li class="dropdown-item ellipsis" role="option">Title - Z to A</li>
+            </ul>
+          </div>
+          <div class="results-access">
+            <button class="results-control-btn" aria-haspopup="listbox" title="Quickly access search history">Quick Access <i class="fas fa-sort-down dropdown-icon"></i></button>
+            <ul class="quick-access-list dropdown-list" tabindex="-1"
+            role="listbox">
+              <li class="dropdown-item ellipsis quick-access-all selected" title="all" role="option" aria-selected="true">All Results</li>
+            </ul>
+          </div>
         </div>
       </div>
       <ul class="results">

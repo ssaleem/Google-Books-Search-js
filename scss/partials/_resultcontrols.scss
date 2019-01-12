@@ -1,5 +1,6 @@
 @import 'variables';
-.results-sort{
+
+.results-sort, .results-access {
   position: relative;
   margin: 0 0 0 0.7em ;
   display: inline-block;
@@ -61,11 +62,11 @@
 	background-color: #f3d9c6;
 }
 
-.results-sort:hover .dropdown-list{
+.results-sort:hover .dropdown-list, .results-access:hover .dropdown-list{
   display: block;
 }
 
-.results-sort:hover .results-control-btn{
+.results-sort:hover .results-control-btn, .results-access:hover .results-control-btn{
   background-color: $primary-highlight-color;
   color: $primary-bg-color;
 }
