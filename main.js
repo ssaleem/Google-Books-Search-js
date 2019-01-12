@@ -123,18 +123,17 @@ const utils = {
     return unique.reverse();
   },
   sortRating(list) {
-  return list.sort((a,b) => {
-    // Set any undefined ratings to 0
-    if(!a.volumeInfo.averageRating) {
-      a.volumeInfo.averageRating = 0;
-    }
-    if(!b.volumeInfo.averageRating) {
-      b.volumeInfo.averageRating = 0;
-    }
-    // Scale values for integer comparison
-    return (b.volumeInfo.averageRating * 10 - a.volumeInfo.averageRating * 10);
-  });
-}
+    return list.sort((a,b) => {
+      // Set any undefined ratings to 0
+      (!a.volumeInfo.averageRating) && (a.volumeInfo.averageRating = 0);
+      (!b.volumeInfo.averageRating) && (b.volumeInfo.averageRating = 0);
+      // Scale values for integer comparison
+      return (b.volumeInfo.averageRating * 10 - a.volumeInfo.averageRating * 10);
+    });
+  },
+  sortTitle(list) {
+    return list.sort((a,b) => (a.volumeInfo.title > b.volumeInfo.title) ? 1 : ((b.volumeInfo.title > a.volumeInfo.title) ? -1 : 0));
+  }
 }
 
 const controller = {
