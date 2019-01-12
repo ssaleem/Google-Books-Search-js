@@ -1,5 +1,19 @@
 @import 'variables';
 
+#results-count {
+  font-size: 0.75em;
+  padding: 0;
+  @media only screen and (min-width: $screen-md-min) {
+    width: auto;
+    flex-grow: 1;
+  }
+}
+
+#results-count span {
+  font-size: 1.15em;
+  font-weight: bolder;
+}
+
 .results-sort, .results-access {
   position: relative;
   margin: 0 0 0 0.7em ;

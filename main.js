@@ -104,6 +104,7 @@ const resultsView = {
 
 const resultsControlsView = {
   init() {
+    this.resultsCount = document.querySelector('#results-count');
     this.sortOptionList = document.querySelector('.sort-list');
     this.quickAccList = document.querySelector('.quick-access-list');
     this.quickAccAll = document.querySelector('.quick-access-all');
@@ -124,6 +125,9 @@ const resultsControlsView = {
       this.setQuickAccAll();
 
     });
+  },
+  showResultCount(count, term) {
+    this.resultsCount.innerHTML = `showing ${count} results for <span>${term}</span>`;
   },
   // quick access list dynamically expands
   addQuickAccItem(term) {
@@ -271,7 +275,10 @@ const controller = {
   },
   handleQuickAccSelect(selected) {
     this.currQuickAccSelection = selected;
-    resultsView.render(this.sortList(resultsData.getResults(this.currQuickAccSelection).slice(0)));
+    let listToRender = this.sortList(resultsData.getResults(this.currQuickAccSelection).slice(0));
+    let searchTerm = selected || 'all searches';
+    resultsControlsView.showResultCount(listToRender.length, searchTerm);
+    resultsView.render(listToRender);
   },
   handleError(e) {
     resultsView.showError(e);
