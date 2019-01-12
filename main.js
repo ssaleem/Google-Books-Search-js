@@ -105,6 +105,7 @@ const resultsView = {
 const resultsControlsView = {
   init() {
     this.sortOptionList = document.querySelector('.sort-list');
+    this.quickAccList = document.querySelector('.quick-access-list');
 
     this.sortOptionList.addEventListener('click', (event) => {
       if(event.target.matches('.dropdown-item')){
@@ -117,7 +118,29 @@ const resultsControlsView = {
         controller.handleSortSelect(event.target.innerText);
       }
     });
-  }
+  },
+  // quick access list dynamically expands
+  addQuickAccItem(term) {
+  // Limit quick access list to 5 recent items and an 'All Results' option(children[5])
+  this.quickAccList.children.length === 6  && this.quickAccList.removeChild(this.quickAccList.children[4]);
+  // Do not add duplicates to quick access list
+  // if(!allResults.hasOwnProperty(term)) {
+    const quickAccessItem = document.createElement('li');
+    quickAccessItem.innerHTML = term;
+    quickAccessItem.title = term;
+    quickAccessItem.role = 'option';
+    quickAccessItem.className = 'dropdown-item ellipsis';
+    quickAccessItem.addEventListener('click', (event) => {
+      this.quickAccList.querySelector('.selected').setAttribute("aria-selected", "false");
+      this.quickAccList.querySelector('.selected').classList.remove('selected');
+      event.target.setAttribute("aria-selected", "true");
+      event.target.classList.add('selected');
+      // render quick access selection
+      controller.handleQuickAccSelect(event.target.title);
+    });
+    this.quickAccList.insertBefore(quickAccessItem, this.quickAccList.childNodes[0]);
+  // }
+}
 }
 
 const backToTop = {
@@ -174,6 +197,7 @@ const controller = {
     // App state
     this.showingError = false;
     this.currentSortSelection = 'Top Matches';
+    this.currQuickAccSelection = null;   // show all results by default
   },
   // Searches for books and returns a promise that resolves a JSON list
   searchForBooks(term) {
@@ -190,19 +214,23 @@ const controller = {
     });
   },
   // 1. Search
-  // 2. Update results
+  // 2. Update results data
   // 3. Render results on success otherwise render error message
   searchNRender(term) {
     this.searchForBooks(term)
     .then(results => {
       // Check if query was valid and returned any results
       if(results.totalItems > 0){
-        // Remove duplicates if any from new set of results before conctenation
-        resultsData.setResults(utils.getUnique(resultsData.getResults('all'), results.items), 'all');
+        // Store unique results
+        resultsData.setResults(utils.getUnique(resultsData.getResults(), results.items));
+        // Store individual query results to access from quick access list, no duplicate queries in quick access list
+        !resultsData.getResults(term) && resultsControlsView.addQuickAccItem(term);
+        resultsData.setResults(results.items, term);
         // Remove any previous error message
         this.showingError && this.clearError();
         // Render all results
-        resultsView.render(resultsData.getResults('all'));
+        console.log(utils.sortRating(resultsData.getResults().slice(0)));
+        resultsView.render(this.sortList(resultsData.getResults().slice(0)));
       }
       else {
         throw new Error(`No matching results found for ${term}`);
@@ -212,7 +240,7 @@ const controller = {
   },
   handleSortSelect(selected) {
     this.currentSortSelection = selected;
-    resultsView.render(this.sortList(resultsData.getResults().slice(0)));
+    resultsView.render(this.sortList(resultsData.getResults(this.currQuickAccSelection).slice(0)));
   },
   sortList(list) {
    //default state, no sort, most recent first
@@ -229,6 +257,10 @@ const controller = {
       list = utils.sortRating(list);
     }
     return list;
+  },
+  handleQuickAccSelect(selected) {
+    this.currQuickAccSelection = selected;
+    resultsView.render(this.sortList(resultsData.getResults(this.currQuickAccSelection).slice(0)));
   },
   handleError(e) {
     resultsView.showError(e);
