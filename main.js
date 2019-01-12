@@ -16,14 +16,24 @@ const searchView = {
 
 const resultsData = {
   init() {
-    // Object to store all unique results with key 'all' as well as results for individual searches
-    this.results = {'all': []};
+    // Array to store all unique results
+    this.allResults = []
+    // Object to store results for individual searches
+    this.results = {};
   },
-  setResults(res, term) {
-    this.results[term] = res;
-    console.log(this.results[term]);
+  setResults(res, term=null) {
+    if(!term) {
+      this.allResults = res;
+    }
+    else {
+       this.results[term] = res;
+    }
+   console.log(res);
   },
-  getResults(term) {
+  getResults(term=null) {
+    if(!term){
+      return this.allResults;
+    }
     return this.results[term];
   }
 }
