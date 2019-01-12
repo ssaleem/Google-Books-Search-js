@@ -106,6 +106,7 @@ const resultsControlsView = {
   init() {
     this.sortOptionList = document.querySelector('.sort-list');
     this.quickAccList = document.querySelector('.quick-access-list');
+    this.quickAccAll = document.querySelector('.quick-access-all');
 
     this.sortOptionList.addEventListener('click', (event) => {
       if(event.target.matches('.dropdown-item')){
@@ -118,13 +119,16 @@ const resultsControlsView = {
         controller.handleSortSelect(event.target.innerText);
       }
     });
+
+    this.quickAccAll.addEventListener('click', (event) => {
+      this.setQuickAccAll();
+
+    });
   },
   // quick access list dynamically expands
   addQuickAccItem(term) {
-  // Limit quick access list to 5 recent items and an 'All Results' option(children[5])
-  this.quickAccList.children.length === 6  && this.quickAccList.removeChild(this.quickAccList.children[4]);
-  // Do not add duplicates to quick access list
-  // if(!allResults.hasOwnProperty(term)) {
+    // Limit quick access list to 5 recent items and an 'All Results' option(children[5])
+    this.quickAccList.children.length === 6  && this.quickAccList.removeChild(this.quickAccList.children[4]);
     const quickAccessItem = document.createElement('li');
     quickAccessItem.innerHTML = term;
     quickAccessItem.title = term;
@@ -139,8 +143,14 @@ const resultsControlsView = {
       controller.handleQuickAccSelect(event.target.title);
     });
     this.quickAccList.insertBefore(quickAccessItem, this.quickAccList.childNodes[0]);
-  // }
-}
+  },
+  setQuickAccAll() {
+    this.quickAccList.querySelector('.selected').setAttribute("aria-selected", "false");
+    this.quickAccList.querySelector('.selected').classList.remove('selected');
+    this.quickAccAll.setAttribute("aria-selected", "true");
+    this.quickAccAll.classList.add('selected');
+    controller.handleQuickAccSelect(null);
+  }
 }
 
 const backToTop = {
@@ -228,9 +238,10 @@ const controller = {
         resultsData.setResults(results.items, term);
         // Remove any previous error message
         this.showingError && this.clearError();
-        // Render all results
+        // Render all results by resetting quick access to null
         console.log(utils.sortRating(resultsData.getResults().slice(0)));
-        resultsView.render(this.sortList(resultsData.getResults().slice(0)));
+        resultsControlsView.setQuickAccAll();
+        // resultsView.render(this.sortList(resultsData.getResults().slice(0)));
       }
       else {
         throw new Error(`No matching results found for ${term}`);
@@ -243,8 +254,8 @@ const controller = {
     resultsView.render(this.sortList(resultsData.getResults(this.currQuickAccSelection).slice(0)));
   },
   sortList(list) {
-   //default state, no sort, most recent first
-    if(this.currentSortSelection === 'Top Matches') {
+   //default state, no sort, most recent first if all results are displayed
+    if(this.currentSortSelection === 'Top Matches' && this.currQuickAccSelection === null) {
       list = list.reverse();
     }
     else if(this.currentSortSelection === 'Title - A to Z') {
