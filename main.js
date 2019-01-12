@@ -210,6 +210,26 @@ const controller = {
     })
     .catch(e => this.handleError(e));
   },
+  handleSortSelect(selected) {
+    this.currentSortSelection = selected;
+    resultsView.render(this.sortList(resultsData.getResults().slice(0)));
+  },
+  sortList(list) {
+   //default state, no sort, most recent first
+    if(this.currentSortSelection === 'Top Matches') {
+      list = list.reverse();
+    }
+    else if(this.currentSortSelection === 'Title - A to Z') {
+      list = utils.sortTitle(list);
+    }
+    else if(this.currentSortSelection === 'Title - Z to A') {
+      list = utils.sortTitle(list).reverse();
+    }
+    else if(this.currentSortSelection === 'Highly Rated') {
+      list = utils.sortRating(list);
+    }
+    return list;
+  },
   handleError(e) {
     resultsView.showError(e);
     this.showingError = true;
