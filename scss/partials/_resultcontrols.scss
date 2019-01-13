@@ -10,14 +10,14 @@
   flex-direction: column-reverse;
   padding: 0.5em 0.2em 0.2em;
   @media only screen and (min-width: $screen-md-min) {
-    width: 85%;
+    width: $width-screen-md-min;
     margin: auto;
-    max-width: 1080px;
+    max-width: $maxwidth-screen-md-min;
     flex-direction: row;
   }
   @media only screen and (min-width: $screen-xxl-min) {
-    width: 75%;
-    max-width: 1400px;
+    width: $width-screen-xxl-min;
+    max-width: $maxwidth-screen-xxl-min;
   }
 }
 

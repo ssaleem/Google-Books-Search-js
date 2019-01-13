@@ -1,8 +1,11 @@
+// Fonts and colors
 $primary-bg-color: #f9ede4;
 $primary-highlight-color: #cc5500;
 $primary-font-color: #65646AFF;
 $secondary-highlight-color: #D97E25;
+$error-color: #FB130CFF;
 
+// Breakpoints
 // Small tablets (portrait view)
 $screen-md-min: 768px;
 //Large tablets and desktops
@@ -10,6 +13,13 @@ $screen-xl-min: 1200px;
 // Large desktops
 $screen-xxl-min: 1400px;
 
+// Width and xax width
+$width-screen-md-min: 85%;
+$maxwidth-screen-md-min: 1080px;
+$width-screen-xxl-min: 75%;
+$maxwidth-screen-xxl-min: 1400px;
+
+// Mixins
 @mixin no-outline {
   border: none;
   outline: none;
