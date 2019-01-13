@@ -28,7 +28,7 @@ const resultsData = {
     else {
        this.results[term] = res;
     }
-   console.log(res);
+   // console.log(res);
   },
   getResults(term=null) {
     if(!term){
@@ -248,9 +248,7 @@ const controller = {
         !resultsData.getResults(term) && resultsControlsView.addQuickAccItem(term);
         resultsData.setResults(results.items, term);
         // Remove any previous error message
-        this.showingError && this.clearError();
-
-
+        this.clearError();
         // Reset quick access to 'All Results' and render
         resultsControlsView.setQuickAccAll();
       }
@@ -262,6 +260,7 @@ const controller = {
   },
   handleSortSelect(selected) {
     this.currentSortSelection = selected;
+    this.clearError();
     resultsView.render(this.sortList(resultsData.getResults(this.currQuickAccSelection).slice(0)));
   },
   sortList(list) {
@@ -287,15 +286,17 @@ const controller = {
     resultsControlsView.setSortTopMatches();
     let listToRender = this.sortList((resultsData.getResults(this.currQuickAccSelection)).slice(0));
     let searchTerm = selected || 'all searches';
+    this.clearError();
     resultsControlsView.showResultCount(listToRender.length, searchTerm);
     resultsView.render(listToRender);
   },
   handleError(e) {
+    this.clearError();
     resultsView.showError(e);
     this.showingError = true;
   },
   clearError() {
-    resultsView.clearError();
+    this.showingError && resultsView.clearError();
     this.showingError = false;
   }
 }
