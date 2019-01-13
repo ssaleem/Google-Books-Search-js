@@ -43,20 +43,20 @@ const resultsView = {
     this.resultsElement =  document.querySelector('.results');
     this.resultsArea =  document.querySelector('#results-area');
   },
-  render(listToRender) {
+  render(list) {
 
   // Create a fragment and append 'li' elements containing book entries to fragment to prevent frequent updates on DOM
   let fragment = document.createDocumentFragment();
 
   // Generate html for each book entry and append to fragment
-  listToRender.forEach(item => {
+  list.forEach(item => {
     let bookData = item.volumeInfo;
     const bookItem = document.createElement('li');
     bookItem.className = 'book-item';
     // Generate html for book cover
     let cover = '';
     if (bookData.imageLinks && bookData.imageLinks.thumbnail) {
-      const img = `<img class="thumbimg" src=${bookData.imageLinks.thumbnail} alt=${`${bookData.title} book image`}>`;
+      const img = `<a title="Preview Link" href=${bookData.previewLink} target="_blank"><img class="thumbimg" src=${bookData.imageLinks.thumbnail} alt=${`${bookData.title} book image`}></a>`;
       const link = `<a class="preview" title="Preview Link" href=${bookData.previewLink} target="_blank"><i class="fas fa-eye"></i></a>`;
       cover = `<div class="image-div">
                     ${img}
@@ -80,7 +80,6 @@ const resultsView = {
                           ${subtitle}
                           ${authors}`;
     fragment.append(bookItem);
-
   });
   this.resultsElement.innerHTML = '';
   this.resultsElement.appendChild(fragment);
@@ -135,7 +134,7 @@ const resultsControlsView = {
     // Limit quick access list to 5 recent items and an 'All Results' option(children[5])
     this.quickAccList.children.length === 6  && this.quickAccList.removeChild(this.quickAccList.children[4]);
     const quickAccessItem = document.createElement('li');
-    quickAccessItem.innerHTML = term;
+    quickAccessItem.innerHTML = `"${term}"`;
     quickAccessItem.title = term;
     quickAccessItem.role = 'option';
     quickAccessItem.className = 'dropdown-item ellipsis';
@@ -250,13 +249,13 @@ const controller = {
         resultsData.setResults(results.items, term);
         // Remove any previous error message
         this.showingError && this.clearError();
-        // Render all results by resetting quick access to null
-        console.log(utils.sortRating(resultsData.getResults().slice(0)));
+
+
+        // Reset quick access to 'All Results' and render
         resultsControlsView.setQuickAccAll();
-        // resultsView.render(this.sortList(resultsData.getResults().slice(0)));
       }
       else {
-        throw new Error(`No matching results found for ${term}`);
+        throw new Error(`No matching results found for "${term}"`);
       }
     })
     .catch(e => this.handleError(e));
@@ -266,7 +265,7 @@ const controller = {
     resultsView.render(this.sortList(resultsData.getResults(this.currQuickAccSelection).slice(0)));
   },
   sortList(list) {
-   //default state, no sort, most recent first if all results are displayed
+   //default state is no sort, most recent first if all results are displayed
     if(this.currentSortSelection === 'Top Matches' && this.currQuickAccSelection === null) {
       list = list.reverse();
     }
