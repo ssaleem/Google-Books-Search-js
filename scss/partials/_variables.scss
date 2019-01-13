@@ -7,6 +7,8 @@ $secondary-highlight-color: #D97E25;
 $screen-md-min: 768px;
 //Large tablets and desktops
 $screen-xl-min: 1200px;
+// Large desktops
+$screen-xxl-min: 1400px;
 
 @mixin no-outline {
   border: none;

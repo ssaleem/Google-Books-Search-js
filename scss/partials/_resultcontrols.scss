@@ -1,5 +1,26 @@
 @import 'variables';
 
+#results-area-controls {
+  width: 90%;
+  margin: auto;
+  border-bottom: thin solid $primary-bg-color;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  flex-direction: column-reverse;
+  padding: 0.5em 0.2em 0.2em;
+  @media only screen and (min-width: $screen-md-min) {
+    width: 85%;
+    margin: auto;
+    max-width: 1080px;
+    flex-direction: row;
+  }
+  @media only screen and (min-width: $screen-xxl-min) {
+    width: 75%;
+    max-width: 1400px;
+  }
+}
+
 #results-count {
   font-size: 0.75em;
   padding: 0;
@@ -12,6 +33,12 @@
 #results-count span {
   font-size: 1.15em;
   font-weight: bolder;
+}
+
+.dropdowns {
+  display: flex;
+  justify-content: center;
+  flex-wrap: nowrap;
 }
 
 .results-sort, .results-access {
@@ -63,6 +90,7 @@
 
 .selected {
 	font-weight: bolder;
+  font-size: 1.05em;
 }
 
 .dropdown-item {
