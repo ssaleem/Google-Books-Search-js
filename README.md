@@ -26,3 +26,19 @@ For this challenge you will be creating a rudimentary search engine that consume
 - While you must use the three function stubs provided in `main.js`, this challenge will require you to write some code outside of them.
 - You may _not_ use jQuery. Use `document` for DOM manipulation and [`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) for http requests.
   - For requests, you may instead use tools your framework provides (e.g. `$http`) or other packages (e.g. `axios`).
+
+## Solution
+
+### How to Run
+Open `index.html` to run the app.
+
+### Dropdown controls
+Following custom dropdown controls are added to match page theme. ARIA attributes are added to dropdowns for accessibility.
+- Sort by: sort currently rendered results based on title, rating or top matches.
+- Quick Access: since new results are prepended to current set of results in results area, a drop down list is provided to access individual results. List is dynamically expanded and is limited to 5 most recent queries.
+
+### Error Message
+Upon API response error or invalid queries, instead of clearing the result area, error message is displayed on top of current results. Error message is cleared automatically on any subsequent user interaction (new search, dropdown menu selection).
+
+### Dev Dependencies
+[Gulp](https://www.npmjs.com/package/gulp) plugins used for development: browser-sync, gulp-sass, gulp-cssnano.
