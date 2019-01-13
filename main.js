@@ -238,6 +238,7 @@ const controller = {
   // 2. Update results data
   // 3. Render results on success otherwise render error message
   searchNRender(term) {
+    term = term.trim();
     this.searchForBooks(term)
     .then(results => {
       // Check if query was valid and returned any results
