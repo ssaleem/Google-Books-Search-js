@@ -106,6 +106,7 @@ const resultsControlsView = {
   init() {
     this.resultsCount = document.querySelector('#results-count');
     this.sortOptionList = document.querySelector('.sort-list');
+    this.sortTopMatches = document.querySelector('.top-matches');
     this.quickAccList = document.querySelector('.quick-access-list');
     this.quickAccAll = document.querySelector('.quick-access-all');
 
@@ -154,6 +155,12 @@ const resultsControlsView = {
     this.quickAccAll.setAttribute("aria-selected", "true");
     this.quickAccAll.classList.add('selected');
     controller.handleQuickAccSelect(null);
+  },
+  setSortTopMatches() {
+      this.sortOptionList.querySelector('.selected').setAttribute("aria-selected", "false");
+      this.sortOptionList.querySelector('.selected').classList.remove('selected');
+      this.sortTopMatches.setAttribute("aria-selected", "true");
+      this.sortTopMatches.classList.add('selected');
   }
 }
 
@@ -275,7 +282,10 @@ const controller = {
   },
   handleQuickAccSelect(selected) {
     this.currQuickAccSelection = selected;
-    let listToRender = this.sortList(resultsData.getResults(this.currQuickAccSelection).slice(0));
+    // Reset sort selection to 'Top Matches' on new rendering
+    this.currentSortSelection = 'Top Matches';
+    resultsControlsView.setSortTopMatches();
+    let listToRender = this.sortList((resultsData.getResults(this.currQuickAccSelection)).slice(0));
     let searchTerm = selected || 'all searches';
     resultsControlsView.showResultCount(listToRender.length, searchTerm);
     resultsView.render(listToRender);
