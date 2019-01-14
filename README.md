@@ -1,44 +1,25 @@
 # Google Books Search Engine
 
-For this challenge you will be creating a rudimentary search engine that consumes the Google Books API. This is a test of basic front end proficiency.
+A book search application with following features
+- Allows the user to type in a query and display a list of books matching that query.
+- Each item in the list includes the book's author, title, and publishing company, as well as an image of the book cover.
+- From each list item, the user can navigate to more information about the book and its preview available through external links.
+- From a dropdown menu, user can sort the list based on title and rating.
 
-## Instructions
-- Fork this repository and complete the challenge according to the specifications below.
-- Once finished, email your [patch](https://robots.thoughtbot.com/send-a-patch-to-someone-using-git-format-patch) to jobs+dev@docnetwork.org and we will review your submission. **(Do _Not_ Open A Pull Request)**
-
-## Notes
-- **This is a design-oriented challenege.** While your project must be fully functional according to the specs below, we will be paying special attention to your design decisions. Prioritize user experience and show us your style!
-- While not necessary, you may use Vue, AngularJS, or React (in that order of preference) to complete this project if you are more comfortable using a framework.
-- You are encouraged (but not required) to use ES6+ JavaScript. We will be testing your submission with Chrome latest, but we have also included Babel as a dependency of this package. You may transpile and minify `main.js` by running `npm run build`. If you choose to do this, please adjust `index.html` accordingly.
-- All code must be your own. Do not plagarize, copy, or steal code.
-
-## Specifications
-- Research the [Google Books Volume API](https://developers.google.com/books/docs/v1/reference/volumes) to determine how to search for books given a query. You will need to create an [API key](https://developers.google.com/books/docs/v1/using#APIKey).
-- Build a basic search engine for Google Books. There should be a search bar to input a query that will be be passed as an argument to the Google Books API. The results should be rendered in the results area. You must include these fields (if available for the record):
-  - Cover image
-  - Title
-  - Subtitle
-  - Authors
-- Additionally, each result should somehow provide a link to its respective Google Books page. Look at a Google Books entry on Google Books, and see which parameter might help you.
-- Each subsequent query should append or prepend its results to the results area.
-- There must be no duplicates (by Google Books id).
-- **The results should be visually appealing, styled logically, and fully responsive for mobile devices.**
-- While you must use the three function stubs provided in `main.js`, this challenge will require you to write some code outside of them.
-- You may _not_ use jQuery. Use `document` for DOM manipulation and [`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) for http requests.
-  - For requests, you may instead use tools your framework provides (e.g. `$http`) or other packages (e.g. `axios`).
-
-## Solution
-
-### How to Run
-Open `index.html` to run the app.
-
+## Features
 ### Dropdown controls
-Following custom dropdown controls are added to match page theme. ARIA attributes are added to dropdowns for accessibility.
+Following custom dropdown controls are added to match page theme.
 - Sort by: sort currently rendered results based on title, rating or top matches.
 - Quick Access: since new results are prepended to current set of results in results area, a drop down list is provided to access individual results. List is dynamically expanded and is limited to 5 most recent queries.
 
-### Error Message
+ARIA attributes are added to custom dropdowns for accessibility.
+
+### Error Message Display
 Upon API response error or invalid queries, instead of clearing the result area, error message is displayed on top of current results. Error message is cleared automatically on any subsequent user interaction (new search, dropdown menu selection).
 
-### Dev Dependencies
-[Gulp](https://www.npmjs.com/package/gulp) plugins used for development: browser-sync, gulp-sass, gulp-cssnano.
+## Built with
+- [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) - A JavaScript interface for asynchronously fetching resources.
+- [CSS Flexbox](https://www.w3schools.com/css/css3_flexbox.asp) - CSS layout module to design flexible responsive layout structure without using float or positioning.
+- [CSS Media Queries](https://www.w3schools.com/css/css3_mediaqueries.asp) - A popular technique to deliver a tailored style sheet to desktops, laptops, tablets, and mobile phones by defining different style rules for different media types.
+- [Gulp](https://www.npmjs.com/package/gulp) - browser-sync, gulp-sass, gulp-cssnano.
+
