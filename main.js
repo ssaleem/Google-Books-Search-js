@@ -3,8 +3,8 @@ const searchView = {
     this.searchBar = document.querySelector('#search-bar');
     this.searchBtn = document.querySelector('#search-btn');
 
-    // Search bar listeners
-    this.searchBar.addEventListener('keypress', (event) => {
+    // Search listeners
+    this.searchBar.addEventListener('keypress', event => {
       (event.keyCode === 13 && event.target.value !== '') && controller.searchNRender(event.target.value);
     });
 
@@ -16,11 +16,10 @@ const searchView = {
 
 const resultsData = {
   init() {
-    // Array to store all unique results
-    this.allResults = []
-    // Object to store results for individual searches
-    this.results = {};
+    this.allResults = []; // Array to store all unique results
+    this.results = {};  // Object to store results for individual searches
   },
+
   setResults(res, term=null) {
     if(!term) {
       this.allResults = res;
@@ -28,13 +27,10 @@ const resultsData = {
     else {
        this.results[term] = res;
     }
-   // console.log(res);
   },
+
   getResults(term=null) {
-    if(!term){
-      return this.allResults;
-    }
-    return this.results[term];
+    return (!term ? this.allResults : this.results[term]);
   }
 }
 
@@ -43,58 +39,57 @@ const resultsView = {
     this.resultsElement =  document.querySelector('.results');
     this.resultsArea =  document.querySelector('#results-area');
   },
+
   render(list) {
+    // Create a fragment and append 'li' elements containing book entries to fragment to prevent frequent updates on DOM
+    let fragment = document.createDocumentFragment();
 
-  // Create a fragment and append 'li' elements containing book entries to fragment to prevent frequent updates on DOM
-  let fragment = document.createDocumentFragment();
+    // Generate html for each book entry and append to fragment
+    list.forEach(item => {
+      let bookData = item.volumeInfo;
+      const bookItem = document.createElement('li');
+      bookItem.className = 'book-item';
+      // Generate html for book cover
+      let cover = '';
+      if (bookData.imageLinks && bookData.imageLinks.thumbnail) {
+        const img = `<a title="Preview Link" href=${bookData.previewLink} target="_blank"><img class="thumbimg" src=${bookData.imageLinks.thumbnail} alt=${`${bookData.title} book image`}></a>`;
+        const link = `<a class="preview" title="Preview Link" href=${bookData.previewLink} target="_blank"><i class="fas fa-eye"></i></a>`;
+        cover = `<div class="image-div">
+                      ${img}
+                      ${link}
+                      </div>`;
+      }
+      else {
+        cover = `<div class="image-div backup">
+                    <p class="cover-backup">Cover Image Unavailable</p>
+                  </div>`
+      }
+      // Generate html for title, subtitle, and authors
+      const title = `<a class="title ellipsis" href=${bookData.previewLink} title="${bookData.title}" target="_blank">${bookData.title}</a>`;
+      let subtitleProp = bookData.subtitle ? bookData.subtitle : ' ';
+      const subtitle = `<p class="subtitle ellipsis" title="${subtitleProp}">${subtitleProp}</p>`
+      let authorsProp = bookData.authors ? bookData.authors.join(', ') : '';
+      const authors = `<p class="author ellipsis" title="${authorsProp}">${authorsProp}</p>`
+      // Add book data to book entry
+      bookItem.innerHTML = `${cover}
+                            ${title}
+                            ${subtitle}
+                            ${authors}`;
+      fragment.append(bookItem);
+    });
+    this.resultsElement.innerHTML = '';
+    this.resultsElement.appendChild(fragment);
+  },
 
-  // Generate html for each book entry and append to fragment
-  list.forEach(item => {
-    let bookData = item.volumeInfo;
-    const bookItem = document.createElement('li');
-    bookItem.className = 'book-item';
-    // Generate html for book cover
-    let cover = '';
-    if (bookData.imageLinks && bookData.imageLinks.thumbnail) {
-      const img = `<a title="Preview Link" href=${bookData.previewLink} target="_blank"><img class="thumbimg" src=${bookData.imageLinks.thumbnail} alt=${`${bookData.title} book image`}></a>`;
-      const link = `<a class="preview" title="Preview Link" href=${bookData.previewLink} target="_blank"><i class="fas fa-eye"></i></a>`;
-      cover = `<div class="image-div">
-                    ${img}
-                    ${link}
-                    </div>`;
-    }
-    else {
-      cover = `<div class="image-div backup">
-                  <p class="cover-backup">Cover Image Unavailable</p>
-                </div>`
-    }
-    // Generate html for title, subtitle, and authors
-    const title = `<a class="title ellipsis" href=${bookData.previewLink} title="${bookData.title}" target="_blank">${bookData.title}</a>`;
-    let subtitleProp = bookData.subtitle ? bookData.subtitle : ' ';
-    const subtitle = `<p class="subtitle ellipsis" title="${subtitleProp}">${subtitleProp}</p>`
-    let authorsProp = bookData.authors ? bookData.authors.join(', ') : '';
-    const authors = `<p class="author ellipsis" title="${authorsProp}">${authorsProp}</p>`
-    // Add book data to book entry
-    bookItem.innerHTML = `${cover}
-                          ${title}
-                          ${subtitle}
-                          ${authors}`;
-    fragment.append(bookItem);
-  });
-  this.resultsElement.innerHTML = '';
-  this.resultsElement.appendChild(fragment);
-},
   // Renders an error message
   // Previous results are retained in results area while error message is rendered on the top
-  // Commented out code is compatible with the implementation as well, although it clears any previous search results
   showError(msg) {
-    // const html = `<li><p class="error">${msg}</p></li>`;
-    // document.querySelector('#results').innerHTML = html;
     const newError = document.createElement('p');
     newError.className = 'error';
     newError.innerHTML = msg;
     this.resultsArea.insertBefore(newError, this.resultsArea.children[1]);
   },
+
   clearError() {
     this.resultsArea.removeChild(document.querySelector('.error'));
   }
@@ -121,14 +116,15 @@ const resultsControlsView = {
       }
     });
 
-    this.quickAccAll.addEventListener('click', (event) => {
+    this.quickAccAll.addEventListener('click', () => {
       this.setQuickAccAll();
-
     });
   },
+
   showResultCount(count, term) {
     this.resultsCount.innerHTML = `showing ${count} results for <span>${term}</span>`;
   },
+
   // quick access list dynamically expands
   addQuickAccItem(term) {
     // Limit quick access list to 5 recent items and an 'All Results' option(children[5])
@@ -148,6 +144,7 @@ const resultsControlsView = {
     });
     this.quickAccList.insertBefore(quickAccessItem, this.quickAccList.childNodes[0]);
   },
+
   setQuickAccAll() {
     this.quickAccList.querySelector('.selected').setAttribute("aria-selected", "false");
     this.quickAccList.querySelector('.selected').classList.remove('selected');
@@ -155,11 +152,12 @@ const resultsControlsView = {
     this.quickAccAll.classList.add('selected');
     controller.handleQuickAccSelect(null);
   },
+
   setSortTopMatches() {
-      this.sortOptionList.querySelector('.selected').setAttribute("aria-selected", "false");
-      this.sortOptionList.querySelector('.selected').classList.remove('selected');
-      this.sortTopMatches.setAttribute("aria-selected", "true");
-      this.sortTopMatches.classList.add('selected');
+    this.sortOptionList.querySelector('.selected').setAttribute("aria-selected", "false");
+    this.sortOptionList.querySelector('.selected').classList.remove('selected');
+    this.sortTopMatches.setAttribute("aria-selected", "true");
+    this.sortTopMatches.classList.add('selected');
   }
 }
 
@@ -170,15 +168,11 @@ const backToTop = {
       top: 0,
       behavior: 'smooth'
     }));
-    window.onscroll = () => this.scrollCheck();
+    window.addEventListener('scroll', () => this.scrollCheck());
   },
+
   scrollCheck() {
-    if (document.body.scrollTop > 250 || document.documentElement.scrollTop > 250) {
-      this.toTopBtn.style.display = "block";
-    }
-    else {
-      this.toTopBtn.style.display = "none";
-    }
+    this.toTopBtn.style.display =  window.scrollY > 250 ? "block" : "none";
   }
 }
 
@@ -193,6 +187,7 @@ const utils = {
     });
     return unique.reverse();
   },
+
   sortRating(list) {
     return list.sort((a,b) => {
       // Set any undefined ratings to 0
@@ -202,6 +197,7 @@ const utils = {
       return (b.volumeInfo.averageRating * 10 - a.volumeInfo.averageRating * 10);
     });
   },
+
   sortTitle(list) {
     return list.sort((a,b) => (a.volumeInfo.title > b.volumeInfo.title) ? 1 : ((b.volumeInfo.title > a.volumeInfo.title) ? -1 : 0));
   }
@@ -258,11 +254,13 @@ const controller = {
     })
     .catch(e => this.handleError(e));
   },
+
   handleSortSelect(selected) {
     this.currentSortSelection = selected;
     this.clearError();
     resultsView.render(this.sortList(resultsData.getResults(this.currQuickAccSelection).slice(0)));
   },
+
   sortList(list) {
    //default state is no sort, most recent first if all results are displayed
     if(this.currentSortSelection === 'Top Matches' && this.currQuickAccSelection === null) {
@@ -279,6 +277,7 @@ const controller = {
     }
     return list;
   },
+
   handleQuickAccSelect(selected) {
     this.currQuickAccSelection = selected;
     // Reset sort selection to 'Top Matches' on new rendering
@@ -290,11 +289,13 @@ const controller = {
     resultsControlsView.showResultCount(listToRender.length, searchTerm);
     resultsView.render(listToRender);
   },
+
   handleError(e) {
     this.clearError();
     resultsView.showError(e);
     this.showingError = true;
   },
+
   clearError() {
     this.showingError && resultsView.clearError();
     this.showingError = false;
